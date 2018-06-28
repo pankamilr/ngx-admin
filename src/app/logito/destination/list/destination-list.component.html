@@ -8,7 +8,7 @@
             id="destinationInputDate" 
             placeholder="Data wyjazdu"
             [matDatepicker]="picker" 
-            (focus)="picker.open()" 
+            (click)="picker.open()" 
             (dateChange)="destinationDateChange('change', $event)"
             readonly
             />
