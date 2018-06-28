@@ -1,20 +1,26 @@
 <nb-card>
     <nb-card-header>
-        Aktualne przejazdy 
-        
-        <input 
-            type="text" 
-            class="form-control" 
-            id="destinationInputDate" 
-            placeholder="Data wyjazdu"
-            [matDatepicker]="picker" 
-            (click)="picker.open()" 
-            (dateChange)="destinationDateChange('change', $event)"
-            readonly
-            />
-        <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-        <button type="button" class="float-right btn btn-tn btn-secondary" (click)="onCreate($event)">Dodaj</button>
+		<div class="action-groups-header">
+			Aktualne przejazdy
+			<input 
+				type="text" 
+				id="destinationInputDate" 
+				placeholder="Data wyjazdu"
+				[matDatepicker]="picker" 
+				(click)="picker.open()" 
+				(dateChange)="destinationDateChange('change', $event)"
+				readonly
+				/>
+		</div>
+        <nb-actions size="medium">
+			<nb-action icon="fa fa-bicycle" (click)="onCreate($event)"></nb-action>
+			<nb-action icon="nb-plus-circled" (click)="onCreate($event)"></nb-action>
+			<nb-action>
+				<mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
+				<mat-datepicker #picker></mat-datepicker>
+			</nb-action>
+		</nb-actions>
+
     </nb-card-header>
 
     <nb-card-body>
