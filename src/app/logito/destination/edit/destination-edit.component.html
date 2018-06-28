@@ -1,0 +1,322 @@
+<div class="row d-flex align-items-stretch h-100">
+    <div class="col-md-6">
+
+        <form [formGroup]="destinationForm" #form="ngForm" (ngSubmit)="onSubmitDestination(destinationForm)">
+        <mat-accordion class="example-headers-align">
+            <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle="true">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Dane podróżnego</mat-panel-title>
+                    <mat-panel-description>{{destinationForm.get('client').get('surname').value}} {{destinationForm.get('client').get('name').value}}</mat-panel-description>
+                </mat-expansion-panel-header>
+               
+                <div class="row" formGroupName="client">
+                    <div class="col-xs-12 col-md-12 col-lg-6 form-group">
+                        <label for="clientInputSurname">Nazwisko</label>
+                        <div class="input-group input-group-md">
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="clientInputSurname" 
+                            placeholder="Nazwisko" 
+                            formControlName="surname" 
+                            />
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-12 col-lg-6 form-group">
+                        <label for="clientInputName">Imię</label>
+                        <div class="input-group input-group-md">
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="clientInputName" 
+                            placeholder="Imię" 
+                            formControlName="name" 
+                            />
+                        </div>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <label for="clientInputPhone">Numer telefonu</label>
+                        <div class="input-group input-group-md">
+                        <input 
+                            type="numeric" 
+                            id="clientInputPhone" 
+                            placeholder="Numer telefonu" 
+                            mask="(00) 000-00-000" 
+                            class="form-control" 
+                            formControlName="phone" 
+                            />
+                        </div>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <div ngbRadioGroup 
+                             class="btn-group btn-group-toggle btn-outline-toggle-group btn-group-full-width btn-toggle-radio-group" formControlName="type">
+                            <label ngbButtonLabel class="btn btn-outline-success">
+                                <input ngbButton type="radio" [value]="1"> 
+                                <span class="d-none d-lg-block">Klient prywatny</span>
+                                <span class="d-block d-lg-none">Priv</span>
+                            </label>
+                            <label ngbButtonLabel class="btn btn-outline-success">
+                                <input ngbButton type="radio" [value]="2"> 
+                                <span class="d-none d-lg-block">Klient biznesowy</span>
+                                <span class="d-block d-lg-none">Firma</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 form-group" *ngIf="destinationForm.get('client').get('type').value == '2'">
+                        <label for="clientInputPhone">Firma</label>
+                        <ng-select 
+                            [items]="companies" 
+                            formControlName="company"  
+                            id="clientInputCountry"  
+                            bindLabel="name" 
+                            bindValue="id" 
+                            (change)="onCompanySelected($event)"
+                            ></ng-select>
+                    </div>
+                </div>
+                <mat-action-row>
+                    <input 
+                        type="hidden"  
+                        class="form-control" 
+                        ngui-auto-complete 
+                        list-formatter="surname" 
+                        min-chars="3" 
+                        display-property-name="surname" 
+                        #searchClient 
+                        [source]="searchClients.bind(this)" 
+                        (valueChanged)="onAutocompleteSubmit($event)" 
+                        />
+                    <div class="checkbox float-left">
+                        <nb-checkbox>Dodaj nowego klienta</nb-checkbox>
+                    </div>
+                    <nb-actions size="medium">
+                        <nb-action icon="nb-search"></nb-action>
+                    </nb-actions>
+                    <button type="button" class="btn btn-tn btn-secondary" (click)="nextStep($event)" [disabled]="!destinationForm.valid">{{destinationNextButtonText}}</button>
+                </mat-action-row>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" *ngIf="step > 0" hideToggle="true">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Początek trasy</mat-panel-title>
+                    <mat-panel-description>{{destinationForm.get('start').get('country').value}} <mat-icon>map</mat-icon>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                
+                <div class="row" formGroupName="start">
+                    <div class="col-md-12 form-group">
+                        <label for="clientInputCountry">Kraj</label>
+                        <ng-select 
+                            [items]="countries" 
+                            formControlName="country"  
+                            id="clientInputCountry"  
+                            bindLabel="name" 
+                            bindValue="code" 
+                            (change)="onDestinationCountrySelected($event)"
+                            ></ng-select>
+                        <input 
+                            type="hidden" 
+                            formControlName="country_code" 
+                            class="form-control" 
+                            id="clientInputCountryCode" 
+                            readonly="readonly" 
+                            placeholder="" 
+                            />
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="clientInputCity">Miasto</label>
+                        <input 
+                            type="text" 
+                            formControlName="city" 
+                            class="form-control" 
+                            id="clientInputCity" 
+                            placeholder="Miasto" 
+                            />
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="clientInputPostcode">Kod pocztowy</label>
+                        <input 
+                            type="text" 
+                            id="clientInputPostcode" 
+                            placeholder="Kod pocztowy" 
+                            formControlName="postcode"
+                            class="form-control"
+                            />
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <label for="clientInputAddress">Ulica</label>
+                        <input 
+                            type="text" 
+                            id="clientInputAddress" 
+                            placeholder="Ulica" 
+                            formControlName="address_1"
+                            class="form-control"
+                            />
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <label for="clientInputAddressAdditional">Ulica c.d.</label>
+                        <input 
+                            type="text" 
+                            id="clientInputAddressAdditional" 
+                            placeholder="Ulica c.d." 
+                            formControlName="address_2"
+                            class="form-control"
+                            />
+                    </div>
+                </div>
+                
+                <mat-action-row>
+                    <div class="btn-group btn-group-toggle btn-outline-toggle-group">
+                        <button type="button" class="btn btn-tn btn-secondary" (click)="nextStep()" [disabled]="!destinationForm.valid">{{destinationNextButtonText}}</button>
+                    </div>
+                </mat-action-row>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" *ngIf="step > 1" hideToggle="true">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Koniec trasy</mat-panel-title>
+                    <mat-panel-description>{{destinationForm.get('end').get('country').value}} <mat-icon>map</mat-icon>
+                    </mat-panel-description>
+                </mat-expansion-panel-header>
+                
+                <div class="row" formGroupName="end">
+                    <div class="col-md-12 form-group">
+                        <label for="clientInputCountry">Kraj</label>
+                        <ng-select 
+                            [items]="countries" 
+                            formControlName="country"  
+                            id="clientInputCountry"  
+                            bindLabel="name" 
+                            bindValue="code" 
+                            (change)="onDestinationCountrySelected($event)"
+                            ></ng-select>
+                        <input 
+                            type="hidden" 
+                            formControlName="country_code" 
+                            class="form-control" 
+                            id="clientInputCountryCode" 
+                            readonly="readonly" 
+                            placeholder="" 
+                            />
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="clientInputCity">Miasto</label>
+                        <input 
+                            type="text" 
+                            formControlName="city" 
+                            class="form-control" 
+                            id="clientInputCity" 
+                            placeholder="Miasto" 
+                            />
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="clientInputPostcode">Kod pocztowy</label>
+                        <input 
+                            type="text" 
+                            id="clientInputPostcode" 
+                            placeholder="Kod pocztowy" 
+                            formControlName="postcode"
+                            class="form-control"
+                            />
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <label for="clientInputAddress">Ulica</label>
+                        <input 
+                            type="text" 
+                            id="clientInputAddress" 
+                            placeholder="Ulica" 
+                            formControlName="address_1"
+                            class="form-control"
+                            />
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <label for="clientInputAddressAdditional">Ulica c.d.</label>
+                        <input 
+                            type="text" 
+                            id="clientInputAddressAdditional" 
+                            placeholder="Ulica c.d." 
+                            formControlName="address_2"
+                            class="form-control"
+                            />
+                    </div>
+                </div>
+                
+                <mat-action-row>
+                    <button type="button" class="btn btn-tn btn-secondary" (click)="nextStep()" [disabled]="!destinationForm.valid">{{destinationNextButtonText}}</button>
+                </mat-action-row>
+            </mat-expansion-panel>
+            
+            <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)" *ngIf="step > 2" hideToggle="true">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>Dane podróży</mat-panel-title>
+                    <mat-panel-description></mat-panel-description>
+                </mat-expansion-panel-header>
+                
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label for="clientInputCity">Data wyjazdu</label>
+                        <input 
+                            type="text" 
+                            formControlName="travel_date" 
+                            class="form-control" 
+                            id="destinationInputDate" 
+                            placeholder="Data wyjazdu"
+                            [matDatepicker]="picker" 
+                            (focus)="picker.open()" 
+                            [for]="picker"
+                            (dateChange)="destinationDateChange('change', $event)"
+                            readonly
+                            />
+                        <mat-datepicker #picker></mat-datepicker>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label for="clientInputCity">Pora wyjazdu</label>
+                        <div ngbRadioGroup 
+                             class="btn-group btn-group-toggle btn-outline-toggle-group btn-group-full-width btn-toggle-radio-group" formControlName="travel_time">
+                            <label ngbButtonLabel class="btn btn-outline-success">
+                                <input ngbButton type="radio" [value]="1"> 
+                                <span>Rano</span>
+                            </label>
+                            <label ngbButtonLabel class="btn btn-outline-success">
+                                <input ngbButton type="radio" [value]="2"> 
+                                <span>Wieczór</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 form-group">
+                        <label for="clientInputCountry">Kierowca</label>
+                        <ng-select 
+                            [items]="drivers" 
+                            formControlName="driver_id" 
+                            id="clientInputCountry"  
+                            bindLabel="name" 
+                            bindValue="id" 
+                            ></ng-select>
+                    </div>
+                    
+                </div>
+                
+                <mat-action-row>
+                    <button type="submit" class="btn btn-tn btn-secondary" [disabled]="!destinationForm.valid">{{destinationNextButtonText}}</button>
+                </mat-action-row>
+            </mat-expansion-panel>
+
+        </mat-accordion>
+        </form>
+    </div>
+<!--    <div class="col-md-6">
+        <agm-map [latitude]="24.799524"
+            [longitude]="120.975017"
+            [scrollwheel]="false"
+            [zoom]="15" 
+            [styles]='[{
+            "featureType": "landscape",
+            "stylers": [{
+            "color": "#ebeff5"
+            }]
+            }]'><agm-direction *ngIf="dir" 
+                [origin]="dir.origin" [destination]="dir.destination">
+            </agm-direction>
+        </agm-map>
+    </div>-->
+</div>

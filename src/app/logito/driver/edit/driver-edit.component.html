@@ -1,0 +1,63 @@
+<div class="row">
+  <div class="col-md-12 col-lg-6">
+            <form [formGroup]="detailsForm" #form="ngForm" (ngSubmit)="onSubmitEditCompany(detailsForm.value)">
+    <nb-card>
+        <nb-card-header>
+            Dane kierowcy
+        </nb-card-header>
+
+        <nb-card-body>
+            <div class="form-group">
+            <label for="clientInputName">Imię</label>
+            <input 
+                type="text" 
+                formControlName="name" 
+                class="form-control" 
+                id="clientInputName" 
+                placeholder="Imię" 
+                />
+          </div>
+          <div class="form-group">
+            <label for="clientInputAddress">Nazwisko</label>
+            <input 
+                type="text" 
+                formControlName="surname" 
+                class="form-control" 
+                id="clientInputAddress" 
+                placeholder="Nazwisko" 
+                />
+          </div>
+          <div class="form-group">
+            <label for="clientInputPhone">Telefon</label>
+            <input 
+                type="numeric" 
+                id="clientInputPhone" 
+                placeholder="Numer telefonu" 
+                formControlName="phone" 
+                mask="(00) 000-00-000" 
+                class="form-control"
+                />
+          </div>
+          
+        </nb-card-body>
+    </nb-card>
+      <div class="form-group row">
+            <div class="col-sm-12">
+                <input *ngIf="driver" 
+                class="hidden" 
+                type="number" 
+                formControlName="id" 
+                />
+                <button type="submit" class="btn btn-hero-warning" [disabled]="!detailsForm.valid">
+                    <span *ngIf="driver; else newDriverText">Zmień dane</span>
+                    <ng-template #newDriverText>
+                        <span>Dodaj kierowcę</span>
+                    </ng-template>
+                </button>
+              <button type="button" class="btn btn-outline-secondary float-right" *ngIf="driver" (click)="onSubmitDeleteCompany(driver)">Usuń klienta</button>
+            </div>
+          </div>
+            </form>
+  </div>
+    
+</div>

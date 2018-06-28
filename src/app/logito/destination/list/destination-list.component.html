@@ -1,0 +1,125 @@
+<nb-card>
+    <nb-card-header>
+        Aktualne przejazdy 
+        
+        <input 
+            type="text" 
+            class="form-control" 
+            id="destinationInputDate" 
+            placeholder="Data wyjazdu"
+            [matDatepicker]="picker" 
+            (focus)="picker.open()" 
+            [for]="picker"
+            (dateChange)="destinationDateChange('change', $event)"
+            readonly
+            />
+        <mat-datepicker-toggle [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <button type="button" class="float-right btn btn-tn btn-secondary" (click)="onCreate($event)">Dodaj</button>
+    </nb-card-header>
+
+    <nb-card-body>
+        <ngx-datatable
+            #myTable
+        class='material expandable'
+        [columnMode]="'force'"
+        [headerHeight]="50"
+        [footerHeight]="50"
+        [rowHeight]="50"
+        [scrollbarV]="true"
+        [rows]='rows'
+        (page)="onPage($event)">
+            <ngx-datatable-row-detail [rowHeight]="'100'" #myDetailRow (toggle)="onDetailToggle($event)">
+          <ng-template let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+            <div class="container">
+              <div class="row">
+                <div class="col">
+                  <div><strong>Pasażer</strong></div>
+                  <div>{{row.client.surname}} {{row.client.name}}<br />
+                      <span *ngIf="row.client.phone">tel. <a href="tel:{{row.client.phone}}">{{row.client.phone}}</a></span></div>
+                </div>
+                <div class="col">
+                  <div><strong>Adres startu</strong></div>
+                  <div>{{row.start.address_1}}, {{row.start.address_2}}<br />
+                      {{row.start.postcode}} {{row.start.city}}<br />
+                  {{row.start.country}}</div>
+                </div>
+                <div class="col">
+                  <div><strong>Adres mety</strong></div>
+                  <div>{{row.end.address_1}}, {{row.end.address_2}}<br />
+                      {{row.end.postcode}} {{row.end.city}}<br />
+                  {{row.end.country}}</div>
+                </div>
+                <div class="col">
+                  <div><strong>Kierowca</strong></div>
+                  <div>{{row.driver.name}}<br />
+                      <span *ngIf="row.driver.phone">tel. <a href="tel:{{row.driver.phone}}">{{row.driver.phone}}</a></span></div>
+                </div>
+            </div>
+            </div>
+          </ng-template>
+        </ngx-datatable-row-detail>
+        
+        <ngx-datatable-column
+          [width]="30"
+          [resizeable]="false"
+          [sortable]="false"
+          [draggable]="false"
+          [canAutoResize]="false">
+          <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+            <a
+              href="javascript:void(0)"
+              [class.datatable-icon-right]="!expanded"
+              [class.datatable-icon-down]="expanded"
+              title="Expand/Collapse Row"
+              (click)="toggleExpandRow(row)"
+              class="desktop-hidden">
+            </a>
+          </ng-template>
+        </ngx-datatable-column>
+            
+        <ngx-datatable-column name="Pasażer" [flexGrow]="4" [minWidth]="250" prop="client">
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <strong>{{value.surname}} {{value.name}}</strong>
+          </ng-template>
+        </ngx-datatable-column>
+            
+        <ngx-datatable-column name="Start" [flexGrow]="1" prop="start">
+           <ng-template let-column="column" ngx-datatable-header-template>
+            <span class="d-none d-sm-block">{{column.name}}</span>
+          </ng-template>
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <span class="d-none d-sm-block">{{value.country}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+            
+        <ngx-datatable-column name="Meta" [flexGrow]="1" prop="end">            
+          <ng-template let-column="column" ngx-datatable-header-template>
+            <span class="d-none d-sm-block">{{column.name}}</span>
+          </ng-template>
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <span class="d-none d-sm-block">{{value.country}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+            
+        <ngx-datatable-column name="Data" [flexGrow]="1">
+          <ng-template let-column="column" ngx-datatable-header-template>
+            <span class="d-none d-sm-block">{{column.name}}</span>
+          </ng-template>
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <span class="d-none d-sm-block">{{row.date}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+            
+        <ngx-datatable-column name="Kierowca" [flexGrow]="1" prop="driver">
+          <ng-template let-column="column" ngx-datatable-header-template>
+            <span class="d-none d-sm-block">{{column.name}}</span>
+          </ng-template>
+          <ng-template let-value="value" ngx-datatable-cell-template>
+            <span class="d-none d-sm-block">{{value.surname}} {{value.name}}</span>
+          </ng-template>
+        </ngx-datatable-column>
+            
+      </ngx-datatable>
+    </nb-card-body>
+</nb-card>

@@ -1,0 +1,53 @@
+@import '../../../@theme/styles/themes';
+@import '~bootstrap/scss/mixins/breakpoints';
+@import '~@nebular/theme/styles/global/bootstrap/breakpoints';
+
+@include nb-install-component() {
+  nb-tabset {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  nb-tab {
+    padding: nb-theme(padding);
+  }
+  
+  nb-tab.no-body-padding {
+      padding: 0;
+  }
+  
+  .direction-edits {
+      font-size: 2rem;
+      line-height: 1;
+  }
+  
+  /deep/ agm-map {
+    width: 100%;
+    min-height: nb-theme(card-height-large);
+    height: 85vh;
+  }
+  
+  /deep/ .nb-theme-default .ngui-auto-complete-wrapper .form-control {
+        font-size: 0.875rem;
+        padding: 0.375rem 1.125rem;
+    }
+
+  /deep/ ngx-tab1, /deep/ ngx-tab2 {
+    display: block;
+    padding: nb-theme(padding);
+  }
+
+  @include media-breakpoint-down(xs) {
+    nb-tabset /deep/ul {
+      font-size: 1rem;
+      padding: 0 0.25rem;
+    }    
+  
+    /deep/ agm-map {
+      min-height: nb-theme(card-height-large);
+      max-height: nb-theme(card-height-large);
+      height: nb-theme(card-height-large);
+    }
+  }
+}

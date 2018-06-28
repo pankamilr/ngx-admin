@@ -1,0 +1,135 @@
+<div class="row">
+  <div class="col-md-12 col-lg-6">
+            <form [formGroup]="detailsForm" #form="ngForm" (ngSubmit)="onSubmitEditCompany(detailsForm.value)">
+    <nb-card>
+        <nb-card-header>
+            Dane klienta
+        </nb-card-header>
+
+        <nb-card-body>
+            <div class="form-group">
+            <label for="clientInputName">Pełna nazwa firmy</label>
+            <input 
+                type="text" 
+                formControlName="name" 
+                class="form-control" 
+                id="clientInputName" 
+                placeholder="Pełna nazwa firmy" 
+                />
+          </div>
+          <div class="form-group">
+            <label for="clientInputCountry">Kraj</label>
+            <ng-select 
+                [items]="countries" 
+                formControlName="country"  
+                id="clientInputCountry"  
+                bindLabel="name" 
+                bindValue="code" 
+                (change)="onCountrySelected($event)"
+                ></ng-select>
+            <input 
+                type="hidden" 
+                formControlName="country_code" 
+                class="form-control" 
+                id="clientInputCountryCode" 
+                readonly="readonly" 
+                placeholder="" 
+                />
+          </div>
+          <div class="form-group">
+            <label for="clientInputAddress">Adres</label>
+            <input 
+                type="text" 
+                formControlName="address_1" 
+                class="form-control" 
+                id="clientInputAddress" 
+                placeholder="Adres, np ulica, numer budynku" 
+                />
+          </div>
+          <div class="form-group">
+            <label for="clientInputAddress2">Adres cd.</label>
+            <input 
+                type="text" 
+                formControlName="address_2" 
+                class="form-control" 
+                id="clientInputAddress2" 
+                placeholder="Adres, dodatkowe informacje" 
+                />
+          </div>
+          <div class="form-group">
+            <label for="clientInputPhone">Telefon</label>
+            <input 
+                type="numeric" 
+                id="clientInputPhone" 
+                placeholder="Numer telefonu" 
+                formControlName="phone" 
+                mask="(00) 000-00-000" 
+                class="form-control"
+                />
+          </div>
+          
+            <div class="form-group row">
+                <div class="col-xs-12 col-md-5">
+            <label for="clientInputPostcode">Kod pocztowy</label>
+            <input 
+                type="text" 
+                id="clientInputPostcode" 
+                placeholder="Kod pocztowy" 
+                formControlName="postcode" 
+                mask="00-000" 
+                class="form-control"
+                />
+          </div>
+          <div class="col-xs-12 col-md-7">
+            <label for="clientInputCity">Miasto</label>
+            <input 
+                type="text" 
+                id="clientInputCity" 
+                placeholder="Miasto" 
+                formControlName="city" 
+                class="form-control"
+                />
+          </div></div>
+        <div class="form-group">
+            <label for="clientInputPhone">E-mail</label>
+            <input 
+                type="email" 
+                id="clientInputEmail" 
+                placeholder="Adres e-mail do korespondencji, wysyłania faktur itp." 
+                formControlName="email" 
+                class="form-control"
+                />
+          </div>
+        <div class="form-group">
+            <label for="clientInputPhone">NIP</label>
+            <input 
+                type="text" 
+                id="clientInputNip" 
+                placeholder="Numer identyfikacji podatkowej" 
+                formControlName="nip" 
+                class="form-control"
+                />
+          </div>
+            
+        </nb-card-body>
+    </nb-card>
+      <div class="form-group row">
+            <div class="col-sm-12">
+                <input *ngIf="company" 
+                class="hidden" 
+                type="number" 
+                formControlName="id" 
+                />
+                <button type="submit" class="btn btn-hero-warning" [disabled]="!detailsForm.valid">
+                    <span *ngIf="company; else newCompanyText">Zmień dane</span>
+                    <ng-template #newCompanyText>
+                        <span>Dodaj kontrahenta</span>
+                    </ng-template>
+                </button>
+              <button type="button" class="btn btn-outline-secondary float-right" *ngIf="company" (click)="onSubmitDeleteCompany(company)">Usuń klienta</button>
+            </div>
+          </div>
+            </form>
+  </div>
+    
+</div>

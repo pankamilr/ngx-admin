@@ -1,0 +1,113 @@
+<div class="row">
+    <div class="col-md-12 col-lg-6">
+        <form [formGroup]="detailsForm" #form="ngForm" (ngSubmit)="onSubmitEditClient(detailsForm.value)">
+            <nb-card>
+                <nb-card-header>
+                    Dane klienta
+                </nb-card-header>
+
+                <nb-card-body>
+                    <div class="form-group">
+                        <label for="clientInputSurname">Nazwisko</label>
+                        <input 
+                            type="text" 
+                            formControlName="surname" 
+                            class="form-control" 
+                            id="clientInputSurname" 
+                            placeholder="Nazwisko" 
+                            />
+                    </div>
+                    <div class="form-group">
+                        <label for="clientInputName">Imię</label>
+                        <input 
+                            type="text" 
+                            formControlName="name" 
+                            class="form-control" 
+                            id="clientInputName" 
+                            placeholder="Imię" 
+                            />
+                    </div>
+                    <div class="form-group">
+                        <label for="clientInputPhone">Numer telefonu</label>
+                        <input 
+                            type="numeric" 
+                            id="clientInputPhone" 
+                            placeholder="Numer telefonu" 
+                            formControlName="phone" 
+                            mask="(00) 000-00-000" 
+                            class="form-control"
+                            />
+                    </div>
+                    <div class="form-group">
+                        <div ngbRadioGroup 
+                             class="btn-group btn-group-toggle btn-outline-toggle-group btn-group-full-width btn-toggle-radio-group" formControlName="type">
+                            <label ngbButtonLabel class="btn btn-outline-success">
+                                <input ngbButton type="radio" [value]="1"> 
+                                <span class="d-none d-sm-block">Klient prywatny</span>
+                                <span class="d-block d-sm-none">Priv</span>
+                            </label>
+                            <label ngbButtonLabel class="btn btn-outline-success">
+                                <input ngbButton type="radio" [value]="2"> 
+                                <span class="d-none d-sm-block">Klient biznesowy</span>
+                                <span class="d-block d-sm-none">Firma</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="detailsForm.get('type').value == '2'">
+                        <label for="clientInputPhone">Firma</label>
+                        <ng-select 
+                            [items]="companies" 
+                            formControlName="company"  
+                            id="clientInputCompany"  
+                            bindLabel="name" 
+                            bindValue="id" 
+                            ></ng-select>
+                    </div>
+                </nb-card-body>
+            </nb-card>
+            <div class="form-group row">
+                <div class="col-sm-12">
+                    <input *ngIf="client"
+                        type="hidden" 
+                        formControlName="id" 
+                        />
+                    <button type="submit" class="btn btn-hero-warning" [disabled]="!detailsForm.valid">
+                        <span *ngIf="client; else newClientText">Zmień dane</span>
+                        <ng-template #newClientText>
+                            <span>Dodaj klienta</span>
+                        </ng-template>
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary float-right" (click)="onSubmitDeleteClient(client)" *ngIf="client">Usuń klienta</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-12 col-lg-6" *ngIf="client">
+        <nb-card>        
+            <nb-tabset (changeTab)="onChangeDirectionTab($event)">
+                <nb-tab #directionListTab id="directionList" tabTitle="Kierunki klienta" class="no-body-padding">
+                    <div class="list-group" *ngIf="client.directions">
+                        <div class="list-group-item list-group-item-action flex-column align-items-start" *ngFor="let direction of client.directions">
+                             <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{direction.country }}, {{direction.city}}</h5>
+                                <div class="direction-edits">
+                                    <i class="nb-edit" (click)="onEditDirection(direction)"></i> 
+                                    <i class="nb-trash" (click)="onDeleteDirection(direction)"></i>
+                                </div>
+                            </div>
+                            <div class="d-flex w-100 justify-content-between">
+                                <div>
+                                    <p class="mb-1">{{direction.address_1}}, {{direction.postcode}}</p>
+                                    <small>{{direction.address_2}}</small>
+                                </div>
+                            </div>
+                        </div>                
+                    </div>
+                </nb-tab>
+                <nb-tab #directionFormTab tabTitle="Dodaj nowy kierunek">
+                    <client-direction [client]="client" (onSuccess)="onSuccessDirectionSubmit($event)"></client-direction>
+                </nb-tab>
+            </nb-tabset>
+        </nb-card>
+    </div>
+</div>
