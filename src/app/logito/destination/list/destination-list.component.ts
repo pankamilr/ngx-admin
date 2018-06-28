@@ -2,6 +2,7 @@ import {Component, OnInit, AfterViewInit, ViewChild, ChangeDetectorRef} from '@a
 import {Router} from "@angular/router";
 import {HttpClient} from '@angular/common/http';
 import {ServerDataSource} from 'ng2-smart-table';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 
 import {DestinationService} from './../destination.service';
 
@@ -68,6 +69,9 @@ export class DestinationListComponent implements OnInit, AfterViewInit {
 
     onDetailToggle(event) {
         console.log('Detail Toggled', event);
+    }
+    destinationDateChange(type: string, event: MatDatepickerInputEvent<Date>) {
+        console.log(event);
     }
 
     ngAfterViewInit() {

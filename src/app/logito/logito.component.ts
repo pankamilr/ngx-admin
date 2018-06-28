@@ -21,6 +21,7 @@ import { MENU_ITEMS } from './logito-menu';
       <router-outlet></router-outlet>
     </ngx-one-column-layout>
   `,
+  styleUrls: ['./logito.scss'],
 })
 export class LogitoComponent implements OnInit, OnDestroy {
 

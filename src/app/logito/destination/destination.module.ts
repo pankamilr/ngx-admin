@@ -6,7 +6,6 @@ import { NgxMaskModule } from 'ngx-mask';
 import { NguiAutoCompleteModule } from '@ngui/auto-complete';
 import { AgmCoreModule } from '@agm/core';
 import { AgmDirectionModule } from 'agm-direction';
-import {DirectionsMapDirective} from './../../@theme/directives/agmdirection.directive';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { ThemeModule } from './../../@theme/theme.module';
@@ -29,7 +28,6 @@ import { DestinationRoutingModule, routedComponents } from './destination-routin
     NgxDatatableModule
   ],
   declarations: [
-    DirectionsMapDirective,
     ...routedComponents
   ],
   providers: [
