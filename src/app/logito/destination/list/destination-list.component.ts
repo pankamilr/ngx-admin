@@ -41,12 +41,12 @@ export class DestinationListComponent implements OnInit, AfterViewInit {
         private router:Router,
         private service: DestinationService
     ) {
-        this.service.getDestination().subscribe((companies) => {
-            const rowss = [];
-            companies.forEach(element => rowss.push(element, { detailRow: true, element }));
-            this.rows = Observable.of(rowss);
+        //this.service.getDestination().subscribe((companies) => {
+        //    const rowss = [];
+        //    companies.forEach(element => rowss.push(element, { detailRow: true, element }));
+        //    this.rows = Observable.of(rowss);
 //            this.rows = companies;
-        });
+        //});
         
     }
     
@@ -116,15 +116,15 @@ export class ExampleDataSource extends DataSource<any> {
 
   disconnect() { }
 }
-export class LessonsDataSource implements DataSource<Lesson> {
+export class LessonsDataSource implements DataSource<any> {
 
-    private lessonsSubject = new BehaviorSubject<Lesson[]>([]);
+    private lessonsSubject = new BehaviorSubject<any>([]);
 
     private loadingSubject = new BehaviorSubject<boolean>(false);
 
     public loading$ = this.loadingSubject.asObservable();
 
-    constructor(private coursesService: CoursesService) {
+    constructor(private destService: DestinationService) {
 
     }
 
@@ -136,8 +136,7 @@ export class LessonsDataSource implements DataSource<Lesson> {
 
         this.loadingSubject.next(true);
 
-        this.coursesService.findLessons(courseId, filter, sortDirection,
-            pageIndex, pageSize).pipe(
+        this.destService.getDestination().pipe(
                 catchError(() => of([])),
                 finalize(() => this.loadingSubject.next(false))
             )
@@ -145,7 +144,7 @@ export class LessonsDataSource implements DataSource<Lesson> {
 
     }
 
-    connect(collectionViewer: CollectionViewer): Observable<Lesson[]> {
+    connect(collectionViewer: CollectionViewer): Observable<any> {
         console.log("Connecting data source");
         return this.lessonsSubject.asObservable();
     }
