@@ -11,8 +11,8 @@ const httpOptions = {
 
 @Injectable()
 export class LogitoService {
-    @Input() baseUrl: string = "https://logito.fajnydesign.pl/api";
-    //@Input() baseUrl: string = "http://logit-api.dv/api";
+//    @Input() baseUrl: string = "https://logito.fajnydesign.pl/api";
+    @Input() baseUrl: string = "http://logit-api.dv/api";
     @Input() countriesUrl: string = this.baseUrl + "/destination/countries";
     @Input() companiesUrl: string = this.baseUrl + "/companies";
     @Input() driversUrl: string = this.baseUrl + "/drivers";

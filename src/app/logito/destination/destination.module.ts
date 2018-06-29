@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import {MAT_DATE_LOCALE, MatInputModule,MatDatepickerModule, MatExpansionModule, MatIconModule, MatFormFieldModule, MatNativeDateModule} from '@angular/material';
+import {MAT_DATE_LOCALE, MatTableModule, MatInputModule,MatDatepickerModule, MatExpansionModule, MatIconModule, MatFormFieldModule, MatNativeDateModule} from '@angular/material';
+import { CdkTableModule} from '@angular/cdk/table';
 import { Ng2SmartTableModule } from 'ng2-smart-table';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxMaskModule } from 'ngx-mask';
@@ -14,7 +15,7 @@ import { DestinationRoutingModule, routedComponents } from './destination-routin
 @NgModule({
   imports: [
     ThemeModule,
-    MatInputModule, MatDatepickerModule, MatExpansionModule, MatIconModule, MatFormFieldModule, MatNativeDateModule, 
+    MatInputModule, CdkTableModule, MatTableModule, MatDatepickerModule, MatExpansionModule, MatIconModule, MatFormFieldModule, MatNativeDateModule, 
     DestinationRoutingModule,
     NguiAutoCompleteModule.forRoot(),
     Ng2SmartTableModule,

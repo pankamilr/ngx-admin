@@ -29,10 +29,11 @@ export class DestinationService {
     }
     
     getDestination() {
-        return this.http.get(this.destinationsUrl, httpOptions)
-            .map((res: Response) => { console.log(res); })
-            .catch((error: any) => Observable.throw(error || 'Server error'));
-    }    
+       return this.http.get(this.destinationsUrl, httpOptions).pipe(
+          tap((countries) => console.log(countries)),
+          catchError((error: any) => Observable.throw(error || 'Server error'))
+        ); 
+    }  
     
     getDestinationById (id) {
         return this.http.get(this.destinationsUrl + "/" + id, httpOptions).pipe(
